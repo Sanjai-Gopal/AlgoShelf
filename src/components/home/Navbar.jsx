@@ -48,17 +48,19 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const [prevPath, setPrevPath] = useState(location.pathname);
+
+  // Close mobile drawer on route change without cascading renders
+  if (prevPath !== location.pathname) {
+    setPrevPath(location.pathname);
+    setMobileOpen(false);
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  // Close mobile drawer on route change
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
 
   const scrollToTop = () => {
     setMobileOpen(false);
