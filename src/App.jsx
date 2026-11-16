@@ -21,6 +21,9 @@ import LinearSearch from "./modules/searching/pages/LinearSearch";
 // Arrays Module
 import ArraysHome from "./modules/arrays/pages/ArraysHome";
 
+// Linked List Module
+import LinkedListOperations from "./modules/linked-list/pages/LinkedListOperations";
+
 // Scroll Helper
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -49,6 +52,12 @@ function App() {
 
         {/* Arrays */}
         <Route path="/learn/arrays" element={<ArraysHome />} />
+
+        {/* Linked List */}
+        <Route path="/learn/linked-list" element={<LinkedListOperations />} />
+        <Route path="/learn/linked-list/operations" element={<LinkedListOperations />} />
+        <Route path="/linked-list" element={<LinkedListOperations />} />
+        <Route path="/linked-list/operations" element={<LinkedListOperations />} />
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
