@@ -180,6 +180,16 @@ export default function LinearStructuresPage({ defaultTab = "stack" }) {
               </>
             )}
           </div>
+
+          {/* Complexity Nuance Callout */}
+          <div className="mt-5 rounded-2xl border border-[#E8DDD1] bg-[#FAF7F2] p-5">
+            <h4 className="flex items-center gap-2 text-sm font-semibold text-[#1F1B18]">
+              <span>💡</span> Theoretical O(1) Operations vs. Reactive O(C) Buffer Immutability
+            </h4>
+            <p className="mt-2 text-sm leading-relaxed text-[#5F5952]">
+              {activeContent.complexity.note}
+            </p>
+          </div>
         </section>
 
         {/* Theoretical Foundations */}

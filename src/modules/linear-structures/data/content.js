@@ -34,6 +34,9 @@ export const stackContent = {
     pop: "O(1)",
     peek: "O(1)",
     space: "O(n)",
+    algorithmicComplexity: "O(1) pointer update",
+    immutableBufferComplexity: "O(C) where C = buffer capacity",
+    note: "Algorithmic pointer updates execute in strictly O(1) constant time. In React visualizers, state immutability requires an O(C) buffer copy to produce fresh references for component re-rendering without in-place mutations.",
   },
   applications: [
     "Function call stack tracking recursive execution contexts",
@@ -91,6 +94,9 @@ export const queueContent = {
     dequeue: "O(1)",
     peek: "O(1)",
     space: "O(n)",
+    algorithmicComplexity: "O(1) circular pointer update",
+    immutableBufferComplexity: "O(C) where C = buffer capacity",
+    note: "Algorithmic circular queue pointers ((rear + 1) % C) operate in strictly O(1) constant time without element shifting. In React visualizers, state immutability incurs an O(C) buffer copy to propagate fresh state references across the UI without side effects.",
   },
   applications: [
     "Operating system process scheduling, CPU thread pools, and round-robin dispatchers",
