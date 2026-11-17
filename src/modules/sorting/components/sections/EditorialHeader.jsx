@@ -30,13 +30,13 @@ export default function EditorialHeader() {
                     <div className="h-px w-12 bg-[#D9C9B6]" />
 
                     <p className="font-body text-sm font-semibold uppercase tracking-[0.4em] text-[#A07A56]">
-                        Book II I
+                        Book II
                     </p>
                 </div>
 
                 {/* Title */}
 
-                <h1 className="font-bold display text-10xl leading-tight text-[#202020] md:text-6xl">
+                <h1 className="font-bold font-display text-5xl leading-tight text-[#202020] sm:text-6xl md:text-7xl">
                     Sorting
                     <br />
                     Algorithms
