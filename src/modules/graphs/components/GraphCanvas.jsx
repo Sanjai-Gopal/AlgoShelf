@@ -1,4 +1,4 @@
-import { Network, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 export default function GraphCanvas({
   nodes,

@@ -39,12 +39,10 @@ export default function useGraphVisualizer() {
   };
 
   const handleStart = () => {
-    let generated = [];
-    if (algorithm === "bfs") {
-      generated = generateBfsSteps(nodes, edges, Number(startNodeId));
-    } else {
-      generated = generateDfsSteps(nodes, edges, Number(startNodeId));
-    }
+    const generated =
+      algorithm === "bfs"
+        ? generateBfsSteps(nodes, edges, Number(startNodeId))
+        : generateDfsSteps(nodes, edges, Number(startNodeId));
     setSteps(generated);
     setCurrentStepIndex(0);
     setIsPlaying(true);
