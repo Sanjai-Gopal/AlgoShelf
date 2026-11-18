@@ -1,263 +1,194 @@
 import { useState } from "react";
-import {
-  Play,
-  Pause,
-  SkipForward,
-  SkipBack,
-  RotateCcw,
-  PlusCircle,
-  Trash2,
-  ListPlus,
-  AlertCircle,
-} from "lucide-react";
+import { Plus, Trash2, RotateCcw, AlertCircle } from "lucide-react";
 
 export default function LinkedListControls({
-  nodesCount,
-  activeTab,
-  setActiveTab,
-  inputValue,
-  setInputValue,
-  indexValue,
-  setIndexValue,
-  error,
-  isPlaying,
-  speed,
-  setSpeed,
-  currentStepIndex,
-  totalSteps,
-  executeInsert,
-  executeDelete,
-  stepForward,
-  stepBackward,
-  togglePlay,
-  handleResetList,
-  handleClearList,
+  onInsertBeginning,
+  onInsertEnd,
+  onInsertAtPosition,
+  onDeleteBeginning,
+  onDeleteEnd,
+  onDeleteAtPosition,
+  onReset,
+  length = 0,
+  error = null,
 }) {
-  const [insertPos, setInsertPos] = useState("head"); // 'head' | 'tail' | 'position'
-  const [deletePos, setDeletePos] = useState("head"); // 'head' | 'tail' | 'position'
+  const [insertVal, setInsertVal] = useState("");
+  const [insertPos, setInsertPos] = useState("");
+  const [deletePos, setDeletePos] = useState("");
 
-  const onExecute = () => {
-    if (activeTab === "insert") {
-      executeInsert(insertPos);
-    } else {
-      executeDelete(deletePos);
+  const handleInsertBeginning = (e) => {
+    e.preventDefault();
+    const val = parseInt(insertVal, 10);
+    if (!isNaN(val)) {
+      onInsertBeginning(val);
+      setInsertVal("");
+    }
+  };
+
+  const handleInsertEnd = (e) => {
+    e.preventDefault();
+    const val = parseInt(insertVal, 10);
+    if (!isNaN(val)) {
+      onInsertEnd(val);
+      setInsertVal("");
+    }
+  };
+
+  const handleInsertAtPosition = (e) => {
+    e.preventDefault();
+    const val = parseInt(insertVal, 10);
+    const pos = parseInt(insertPos, 10);
+    if (!isNaN(val) && !isNaN(pos)) {
+      onInsertAtPosition(val, pos);
+      setInsertVal("");
+      setInsertPos("");
+    }
+  };
+
+  const handleDeleteAtPosition = (e) => {
+    e.preventDefault();
+    const pos = parseInt(deletePos, 10);
+    if (!isNaN(pos)) {
+      onDeleteAtPosition(pos);
+      setDeletePos("");
     }
   };
 
   return (
-    <div className="rounded-3xl border border-[#E8DDD1] bg-white p-6 shadow-sm md:p-8">
-      {/* Tabs: Insert vs Delete */}
-      <div className="flex border-b border-[#EEE5DB] pb-4">
+    <div className="rounded-2xl border border-[#E8DDD1] bg-[#FCFBF8] p-5 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#EEE5DB] pb-4">
+        <div>
+          <h3 className="font-display text-lg font-semibold text-[#1F1B18]">
+            Singly Linked List Operations
+          </h3>
+          <p className="text-xs text-[#8C837B]">
+            Insert or delete nodes at the beginning, end, or arbitrary indices
+          </p>
+        </div>
+
         <button
           type="button"
-          onClick={() => setActiveTab("insert")}
-          className={`flex items-center gap-2 border-b-2 px-5 py-2.5 text-sm font-semibold transition-all ${
-            activeTab === "insert"
-              ? "border-[#A1764E] text-[#8B5A2B]"
-              : "border-transparent text-[#8C837B] hover:text-[#1F1B18]"
-          }`}
+          onClick={onReset}
+          className="flex items-center gap-1.5 rounded-xl border border-[#E8DED2] bg-white px-3 py-1.5 text-xs font-semibold text-[#6B5B4D] shadow-sm transition hover:bg-[#F7F3EE]"
         >
-          <PlusCircle size={16} />
-          Insertion Operations
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab("delete")}
-          className={`flex items-center gap-2 border-b-2 px-5 py-2.5 text-sm font-semibold transition-all ${
-            activeTab === "delete"
-              ? "border-[#C84B31] text-[#9E2A2B]"
-              : "border-transparent text-[#8C837B] hover:text-[#1F1B18]"
-          }`}
-        >
-          <Trash2 size={16} />
-          Deletion Operations
+          <RotateCcw size={13} />
+          <span>Reset List</span>
         </button>
       </div>
 
-      {/* Operation Form */}
-      <div className="mt-6 grid gap-6 md:grid-cols-2">
-        {/* Left: Inputs */}
-        <div className="space-y-4">
-          {activeTab === "insert" && (
-            <div>
-              <label
-                htmlFor="node-val-input"
-                className="block text-xs font-semibold uppercase tracking-wider text-[#6B5B4D]"
-              >
-                Node Value (number)
-              </label>
-              <input
-                id="node-val-input"
-                type="number"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="e.g. 50"
-                className="mt-1.5 w-full rounded-xl border border-[#E8DDD1] bg-[#FCFBF8] px-4 py-2.5 font-mono text-base font-semibold text-[#1F1B18] shadow-xs focus:border-[#A1764E] focus:outline-none focus:ring-1 focus:ring-[#A1764E]"
-              />
-            </div>
-          )}
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        {/* Insertion Section */}
+        <div className="rounded-xl border border-[#EEE5DB] bg-white p-4">
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#4B7754]">
+            Insertion Operations
+          </span>
 
-          <div>
-            <span className="block text-xs font-semibold uppercase tracking-wider text-[#6B5B4D]">
-              Target Position
-            </span>
-            <div className="mt-2 grid grid-cols-3 gap-2">
-              <button
-                type="button"
-                onClick={() => (activeTab === "insert" ? setInsertPos("head") : setDeletePos("head"))}
-                className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-all ${
-                  (activeTab === "insert" ? insertPos : deletePos) === "head"
-                    ? "border-[#A1764E] bg-[#F7F2EA] text-[#8B5A2B] shadow-xs"
-                    : "border-[#E8DDD1] bg-white text-[#6B5B4D] hover:bg-[#FDFBF7]"
-                }`}
-              >
-                Beginning (Head)
-              </button>
-              <button
-                type="button"
-                onClick={() => (activeTab === "insert" ? setInsertPos("tail") : setDeletePos("tail"))}
-                className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-all ${
-                  (activeTab === "insert" ? insertPos : deletePos) === "tail"
-                    ? "border-[#A1764E] bg-[#F7F2EA] text-[#8B5A2B] shadow-xs"
-                    : "border-[#E8DDD1] bg-white text-[#6B5B4D] hover:bg-[#FDFBF7]"
-                }`}
-              >
-                End (Tail)
-              </button>
-              <button
-                type="button"
-                onClick={() => (activeTab === "insert" ? setInsertPos("position") : setDeletePos("position"))}
-                className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-all ${
-                  (activeTab === "insert" ? insertPos : deletePos) === "position"
-                    ? "border-[#A1764E] bg-[#F7F2EA] text-[#8B5A2B] shadow-xs"
-                    : "border-[#E8DDD1] bg-white text-[#6B5B4D] hover:bg-[#FDFBF7]"
-                }`}
-              >
-                Custom Index
-              </button>
-            </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <input
+              type="number"
+              placeholder="Value"
+              value={insertVal}
+              onChange={(e) => setInsertVal(e.target.value)}
+              className="w-24 rounded-xl border border-[#E8DED2] bg-white px-3 py-1.5 text-xs font-mono text-[#1F1B18] shadow-sm focus:border-[#4B7754] focus:outline-none"
+            />
+            <button
+              type="button"
+              onClick={handleInsertBeginning}
+              disabled={!insertVal.trim()}
+              className="flex items-center gap-1 rounded-xl bg-[#4B7754] px-3 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#3B5E42] disabled:opacity-40"
+            >
+              <Plus size={13} />
+              <span>At Beginning (Head)</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleInsertEnd}
+              disabled={!insertVal.trim()}
+              className="flex items-center gap-1 rounded-xl bg-[#4B7754] px-3 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#3B5E42] disabled:opacity-40"
+            >
+              <Plus size={13} />
+              <span>At End (Tail)</span>
+            </button>
           </div>
 
-          {(activeTab === "insert" ? insertPos : deletePos) === "position" && (
-            <div>
-              <label
-                htmlFor="node-idx-input"
-                className="block text-xs font-semibold uppercase tracking-wider text-[#6B5B4D]"
-              >
-                Index (0 to {activeTab === "insert" ? nodesCount : Math.max(0, nodesCount - 1)})
-              </label>
-              <input
-                id="node-idx-input"
-                type="number"
-                min="0"
-                max={activeTab === "insert" ? nodesCount : Math.max(0, nodesCount - 1)}
-                value={indexValue}
-                onChange={(e) => setIndexValue(e.target.value)}
-                className="mt-1.5 w-full rounded-xl border border-[#E8DDD1] bg-[#FCFBF8] px-4 py-2 font-mono text-sm font-semibold text-[#1F1B18] shadow-xs focus:border-[#A1764E] focus:outline-none"
-              />
-            </div>
-          )}
-
-          {error && (
-            <div className="flex items-center gap-2 rounded-xl bg-[#FDF2F0] p-3 text-xs font-semibold text-[#9E2A2B]">
-              <AlertCircle size={15} className="shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
-
-          <button
-            type="button"
-            onClick={onExecute}
-            className={`w-full rounded-xl py-3 text-sm font-semibold text-white shadow-sm transition-all ${
-              activeTab === "insert"
-                ? "bg-[#9D7653] hover:bg-[#8A6645] active:scale-[0.99]"
-                : "bg-[#B84A39] hover:bg-[#A33D2D] active:scale-[0.99]"
-            }`}
-          >
-            {activeTab === "insert" ? "Execute Insertion" : "Execute Deletion"}
-          </button>
+          {/* Insert at position */}
+          <div className="mt-3 flex items-center gap-2">
+            <input
+              type="number"
+              placeholder="Pos (0..n)"
+              value={insertPos}
+              onChange={(e) => setInsertPos(e.target.value)}
+              className="w-24 rounded-xl border border-[#E8DED2] bg-white px-3 py-1.5 text-xs font-mono text-[#1F1B18] shadow-sm focus:border-[#4B7754] focus:outline-none"
+            />
+            <button
+              type="button"
+              onClick={handleInsertAtPosition}
+              disabled={!insertVal.trim() || !insertPos.trim()}
+              className="flex items-center gap-1 rounded-xl border border-[#C5DDC5] bg-[#E6EFE6] px-3.5 py-1.5 text-xs font-bold text-[#2D4B34] shadow-sm transition hover:bg-[#D5E8D5] disabled:opacity-40"
+            >
+              <Plus size={13} />
+              <span>Insert at Position</span>
+            </button>
+          </div>
         </div>
 
-        {/* Right: Animation Step Controls & Presets */}
-        <div className="flex flex-col justify-between rounded-2xl border border-[#EEE5DB] bg-[#FCFBF8] p-5">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-[#A1764E]">
-              Playback Controls
-            </p>
+        {/* Deletion Section */}
+        <div className="rounded-xl border border-[#EEE5DB] bg-white p-4">
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#DC2626]">
+            Deletion Operations
+          </span>
 
-            <div className="mt-4 flex items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={stepBackward}
-                disabled={currentStepIndex <= 0}
-                className="rounded-xl border border-[#E8DDD1] bg-white p-2.5 text-[#6B5B4D] shadow-xs transition-all hover:bg-[#F7F2EA] disabled:opacity-40"
-                title="Previous step"
-              >
-                <SkipBack size={18} />
-              </button>
-
-              <button
-                type="button"
-                onClick={togglePlay}
-                disabled={totalSteps <= 0}
-                className="flex items-center gap-2 rounded-xl bg-[#9D7653] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#8A6645] disabled:opacity-40"
-              >
-                {isPlaying ? <Pause size={17} /> : <Play size={17} />}
-                <span>{isPlaying ? "Pause" : "Play"}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={stepForward}
-                disabled={totalSteps <= 0 || currentStepIndex >= totalSteps - 1}
-                className="rounded-xl border border-[#E8DDD1] bg-white p-2.5 text-[#6B5B4D] shadow-xs transition-all hover:bg-[#F7F2EA] disabled:opacity-40"
-                title="Next step"
-              >
-                <SkipForward size={18} />
-              </button>
-            </div>
-
-            {/* Speed slider */}
-            <div className="mt-5">
-              <div className="flex justify-between text-xs font-semibold text-[#8C837B]">
-                <span>Speed</span>
-                <span>{speed === 1300 ? "Slow" : speed === 900 ? "Normal" : "Fast"}</span>
-              </div>
-              <input
-                type="range"
-                min="400"
-                max="1400"
-                step="200"
-                value={1800 - speed}
-                onChange={(e) => setSpeed(1800 - Number(e.target.value))}
-                className="mt-2 w-full accent-[#A1764E]"
-              />
-            </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={onDeleteBeginning}
+              disabled={length === 0}
+              className="flex items-center gap-1 rounded-xl bg-[#DC2626] px-3 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#B91C1C] disabled:opacity-40"
+            >
+              <Trash2 size={13} />
+              <span>From Beginning (Head)</span>
+            </button>
+            <button
+              type="button"
+              onClick={onDeleteEnd}
+              disabled={length === 0}
+              className="flex items-center gap-1 rounded-xl bg-[#DC2626] px-3 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#B91C1C] disabled:opacity-40"
+            >
+              <Trash2 size={13} />
+              <span>From End (Tail)</span>
+            </button>
           </div>
 
-          {/* Presets & Reset */}
-          <div className="mt-6 border-t border-[#EEE5DB] pt-4">
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={handleResetList}
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[#E8DDD1] bg-white py-2 text-xs font-semibold text-[#6B5B4D] shadow-xs transition-all hover:bg-[#F7F2EA]"
-              >
-                <RotateCcw size={14} />
-                Reset Sample
-              </button>
-              <button
-                type="button"
-                onClick={handleClearList}
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[#E8DDD1] bg-white py-2 text-xs font-semibold text-[#6B5B4D] shadow-xs transition-all hover:bg-[#F7F2EA]"
-              >
-                <ListPlus size={14} />
-                Clear List
-              </button>
-            </div>
+          {/* Delete at position */}
+          <div className="mt-3 flex items-center gap-2">
+            <input
+              type="number"
+              placeholder="Pos (0..n-1)"
+              value={deletePos}
+              onChange={(e) => setDeletePos(e.target.value)}
+              disabled={length === 0}
+              className="w-24 rounded-xl border border-[#E8DED2] bg-white px-3 py-1.5 text-xs font-mono text-[#1F1B18] shadow-sm focus:border-[#DC2626] focus:outline-none disabled:opacity-40"
+            />
+            <button
+              type="button"
+              onClick={handleDeleteAtPosition}
+              disabled={length === 0 || !deletePos.trim()}
+              className="flex items-center gap-1 rounded-xl border border-[#FECACA] bg-[#FEE2E2] px-3.5 py-1.5 text-xs font-bold text-[#991B1B] shadow-sm transition hover:bg-[#FDD2D2] disabled:opacity-40"
+            >
+              <Trash2 size={13} />
+              <span>Delete at Position</span>
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Error Banner */}
+      {error && (
+        <div className="mt-4 flex items-center gap-2 rounded-xl border border-[#FCA5A5] bg-[#FEF2F2] p-3 text-xs font-medium text-[#991B1B]">
+          <AlertCircle size={15} className="shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
     </div>
   );
 }

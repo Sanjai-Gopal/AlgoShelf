@@ -20,6 +20,11 @@ import LinearSearch from "./modules/searching/pages/LinearSearch";
 
 // Arrays Module
 import ArraysHome from "./modules/arrays/pages/ArraysHome";
+import ArrayOperations from "./modules/arrays/pages/ArrayOperations";
+
+// Linked List Module
+import LinkedListHome from "./modules/linked-list/pages/LinkedListHome";
+import LinkedListPage from "./modules/linked-list/pages/LinkedListPage";
 
 // Linked List Module
 import LinkedListOperations from "./modules/linked-list/pages/LinkedListOperations";
@@ -52,6 +57,13 @@ function App() {
 
         {/* Arrays */}
         <Route path="/learn/arrays" element={<ArraysHome />} />
+        <Route path="/learn/arrays/operations" element={<ArrayOperations />} />
+
+        {/* Linked Lists */}
+        <Route path="/learn/linked-list" element={<LinkedListHome />} />
+        <Route path="/learn/linked-list/operations" element={<LinkedListPage />} />
+        <Route path="/linked-list" element={<LinkedListHome />} />
+        <Route path="/linked-list/operations" element={<LinkedListPage />} />
 
         {/* Linked List */}
         <Route path="/learn/linked-list" element={<LinkedListOperations />} />
@@ -66,6 +78,4 @@ function App() {
   );
 }
 
-
 export default App;
-
