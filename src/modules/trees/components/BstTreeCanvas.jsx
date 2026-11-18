@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { GitBranch, Sparkles } from "lucide-react";
 
 export default function BstTreeCanvas({ layout, highlightedId, foundId, comparison }) {
